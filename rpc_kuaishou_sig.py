@@ -61,11 +61,14 @@ class Kuaishou(object):
         return re;
     }
     '''
+    processname ='快手'
+    def __init__(self):
+        self.script = self.hook_prepare(self.processname)
 
-    def hook_prepare(self, processname):
+    def hook_prepare(self):
         for i in range(5):
             try:
-                process = frida.get_usb_device().attach(processname)
+                process = frida.get_usb_device().attach(self.processname)
             except:
                 # 杀死进程并且重启和重启frida-server
                 os.system('pkill -9  "smile.gifmaker"')
@@ -90,10 +93,10 @@ class Kuaishou(object):
         else:
             raise Exception('传入的参数必须为字典')
 
-    def get_kuishou_sig(self,processname='', script='',data={}, form_data={}):
+    def get_kuishou_sig(self,data={}, form_data={}):
         data.update(form_data)
         data_str = self.sort_data(data)
-        sig = script.exports.getsig(data_str)
+        sig = self.script.exports.getsig(data_str)
         return sig
 
     def on_message(self,message, data):
