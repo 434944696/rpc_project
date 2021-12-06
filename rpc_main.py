@@ -2,6 +2,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from rpc_kuaishou_sig import Kuaishou
+from rpc_douyin_gorgon import DouYin
 import json
 
 
@@ -11,10 +12,17 @@ class Item(BaseModel):
     processname: str
 
 
+class DYItem(BaseModel):
+    timestamp: int
+    salt: str
+    process_name: str
+
+
 app = FastAPI()
 
 kuaishou = Kuaishou()
 script = kuaishou.hook_prepare('快手')
+
 
 @app.post("/kuaishou/get_sig/")
 async def kuaishou_get_sig(item: Item):
@@ -23,4 +31,15 @@ async def kuaishou_get_sig(item: Item):
     processname = item.processname
     sig = kuaishou.get_kuishou_sig(script,data=data, form_data=form_data)
     return sig
+
+
+@app.post("/douyin/get_gorgon/")
+async def kuaishou_get_sig(item: DYItem):
+    douyin = DouYin()
+    process_name = item.process_name
+    dy_script = douyin.hook_prepare(process_name=process_name)
+    timestamp = item.timestamp
+    salt = item.salt
+    gorgon = douyin.get_douyin_gorgon(dy_script, timestamp=timestamp, salt=salt)
+    return gorgon
 
