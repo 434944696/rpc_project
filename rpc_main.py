@@ -46,11 +46,11 @@ async def douyin_get_gorgon(item: DYItem):
     timestamp = item.timestamp
     salt = item.salt
     processname = item.timestamp
-    global douyin_script_script_is_exist
-    if not douyin_script_script_is_exist:
+    global douyin_script_is_exist
+    if not douyin_script_is_exist:
         global douyin_script_script
         douyin_script_script = kuaishou.hook_prepare(processname)
-        douyin_script_script_is_exist = True
+        douyin_script_is_exist = True
     gorgon = douyin.get_douyin_gorgon(douyin_script, timestamp=timestamp, salt=salt)
     return gorgon
 
