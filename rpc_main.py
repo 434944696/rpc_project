@@ -15,6 +15,8 @@ app = FastAPI()
 
 kuaishou = Kuaishou()
 script = kuaishou.hook_prepare()
+print(script)
+
 
 @app.post("/kuaishou/get_sig/")
 async def kuaishou_get_sig(item: Item):

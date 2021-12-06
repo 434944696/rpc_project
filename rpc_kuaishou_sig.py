@@ -68,13 +68,13 @@ class Kuaishou(object):
     def hook_prepare(self):
         for i in range(5):
             try:
-                process = frida.get_usb_device().attach(self.processname)
+                process = frida.get_local_device().attach(self.processname)
             except:
                 # 杀死进程并且重启和重启frida-server
                 os.system('pkill -9  "smile.gifmaker"')
                 os.system('am start -n com.smile.gifmaker/com.yxcorp.gifshow.HomeActivity')
+                os.system('pkill -9  "frida-server"')
                 os.system('/data/local/tmp/frida-server-15.1.9-android-arm64')
-
                 time.sleep(1)
                 continue
             script = process.create_script(self.hook_code)
