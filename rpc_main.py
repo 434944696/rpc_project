@@ -1,4 +1,5 @@
-# 启动fastApi服务 uvicorn rpc_main:app --host '0.0.0.0' --port 8080 --reload  手机 /data/data/com.termux/files/usr/bin/uvicorn rpc_main:app --host '0.0.0.0' --port 8080
+# 启动fastApi服务 uvicorn rpc_main:app --host '0.0.0.0' --port 8080 --reload
+# 手机 /data/data/com.termux/files/usr/bin/uvicorn rpc_main:app --host '0.0.0.0' --port 8080
 from pydantic import BaseModel
 from rpc_kuaishou_sig import Kuaishou
 from rpc_douyin_gorgon import DouYin
@@ -44,7 +45,7 @@ async def kuaishou_get_sig(item: Item):
 async def douyin_get_gorgon(item: DYItem):
     timestamp = item.timestamp
     salt = item.salt
-    processname = item.timestamp
+    processname = item.processname
     global douyin_script_is_exist
     if not douyin_script_is_exist:
         global douyin_script
