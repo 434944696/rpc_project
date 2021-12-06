@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from rpc_kuaishou_sig import Kuaishou
 from rpc_douyin_gorgon import DouYin
 import json
-
+from fastapi import FastAPI
 
 class Item(BaseModel):
     data: str
