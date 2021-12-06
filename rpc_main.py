@@ -42,7 +42,7 @@ async def kuaishou_get_sig(item: Item):
 
 
 @app.post("/douyin/get_gorgon/")
-async def kuaishou_get_sig(item: DYItem):
+async def douyin_get_gorgon(item: DYItem):
     timestamp = item.timestamp
     salt = item.salt
     processname = item.timestamp
