@@ -14,14 +14,12 @@ class Item(BaseModel):
 app = FastAPI()
 
 kuaishou = Kuaishou()
-script = kuaishou.hook_prepare()
-print(script)
-
+script = kuaishou.hook_prepare('快手')
 
 @app.post("/kuaishou/get_sig/")
 async def kuaishou_get_sig(item: Item):
     data = json.loads(item.data)
     form_data = json.loads(item.formdata)
     processname = item.processname
-    sig = kuaishou.get_kuishou_sig(data=data, form_data=form_data)
+    sig = kuaishou.get_kuishou_sig(script,data=data, form_data=form_data)
     return sig
