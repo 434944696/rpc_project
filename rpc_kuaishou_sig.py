@@ -64,7 +64,7 @@ class Kuaishou(object):
     processname ='快手'
 
     def hook_prepare(self,processname):
-        for i in range(5):
+        for i in range(2):
             try:
                 process = frida.get_local_device().attach(processname)
             except:
