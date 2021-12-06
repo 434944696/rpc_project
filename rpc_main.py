@@ -40,6 +40,6 @@ async def kuaishou_get_sig(item: DYItem):
     dy_script = douyin.hook_prepare(process_name=process_name)
     timestamp = item.timestamp
     salt = item.salt
-    gorgon = douyin.get_douyin_gorgon(dy_script, timestamp=timestamp, salt=salt)
+    gorgon = dy_script.get_douyin_gorgon(dy_script, timestamp=timestamp, salt=salt)
     return gorgon
 
