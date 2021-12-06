@@ -23,3 +23,4 @@ async def kuaishou_get_sig(item: Item):
     processname = item.processname
     sig = kuaishou.get_kuishou_sig(script,data=data, form_data=form_data)
     return sig
+
