@@ -15,13 +15,14 @@ class Item(BaseModel):
 class DYItem(BaseModel):
     timestamp: int
     salt: str
-    process_name: str
 
 
 app = FastAPI()
 
 kuaishou = Kuaishou()
 script = kuaishou.hook_prepare('快手')
+douyin = DouYin()
+dy_script = douyin.hook_prepare("抖音短视频")
 
 
 @app.post("/kuaishou/get_sig/")
@@ -35,9 +36,6 @@ async def kuaishou_get_sig(item: Item):
 
 @app.post("/douyin/get_gorgon/")
 async def kuaishou_get_sig(item: DYItem):
-    douyin = DouYin()
-    process_name = item.process_name
-    dy_script = douyin.hook_prepare(process_name=process_name)
     timestamp = item.timestamp
     salt = item.salt
     gorgon = dy_script.get_douyin_gorgon(dy_script, timestamp=timestamp, salt=salt)
