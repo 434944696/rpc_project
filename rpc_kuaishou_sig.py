@@ -61,7 +61,6 @@ class Kuaishou(object):
         return re;
     }
     '''
-    processname ='快手'
 
     def hook_prepare(self,processname):
         for i in range(2):

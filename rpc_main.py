@@ -17,19 +17,24 @@ class DYItem(BaseModel):
     salt: str
     process_name: str
 
-
 app = FastAPI()
-
 kuaishou = Kuaishou()
-script = kuaishou.hook_prepare('快手')
 
+kuaishou_script_is_exist = False
 
+kuashou_script=''
 @app.post("/kuaishou/get_sig/")
 async def kuaishou_get_sig(item: Item):
     data = json.loads(item.data)
     form_data = json.loads(item.formdata)
     processname = item.processname
-    sig = kuaishou.get_kuishou_sig(script,data=data, form_data=form_data)
+    global kuaishou_script_is_exist
+    if not kuaishou_script_is_exist:
+        global script
+        script = kuaishou.hook_prepare(processname)
+        kuaishou_script_is_exist = True
+
+    sig = kuaishou.get_kuishou_sig(kuashou_script,data=data, form_data=form_data)
     return sig
 
 
