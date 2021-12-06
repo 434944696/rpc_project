@@ -15,14 +15,17 @@ class Item(BaseModel):
 class DYItem(BaseModel):
     timestamp: int
     salt: str
-    process_name: str
+    processname: str
+
 
 app = FastAPI()
 kuaishou = Kuaishou()
+douyin = DouYin()
 
 kuaishou_script_is_exist = False
-
-kuashou_script=''
+kuaishou_script =''
+douyin_script_is_exist = False
+douyin_script =''
 @app.post("/kuaishou/get_sig/")
 async def kuaishou_get_sig(item: Item):
     data = json.loads(item.data)
@@ -30,21 +33,24 @@ async def kuaishou_get_sig(item: Item):
     processname = item.processname
     global kuaishou_script_is_exist
     if not kuaishou_script_is_exist:
-        global script
-        script = kuaishou.hook_prepare(processname)
+        global kuaishou_script
+        kuaishou_script = kuaishou.hook_prepare(processname)
         kuaishou_script_is_exist = True
 
-    sig = kuaishou.get_kuishou_sig(kuashou_script,data=data, form_data=form_data)
+    sig = kuaishou.get_kuishou_sig(kuaishou_script,data=data, form_data=form_data)
     return sig
 
 
 @app.post("/douyin/get_gorgon/")
 async def kuaishou_get_sig(item: DYItem):
-    douyin = DouYin()
-    process_name = item.process_name
-    dy_script = douyin.hook_prepare(process_name=process_name)
     timestamp = item.timestamp
     salt = item.salt
-    gorgon = dy_script.get_douyin_gorgon(dy_script, timestamp=timestamp, salt=salt)
+    processname = item.timestamp
+    global douyin_script_script_is_exist
+    if not douyin_script_script_is_exist:
+        global douyin_script_script
+        douyin_script_script = kuaishou.hook_prepare(processname)
+        douyin_script_script_is_exist = True
+    gorgon = douyin.get_douyin_gorgon(douyin_script, timestamp=timestamp, salt=salt)
     return gorgon
 

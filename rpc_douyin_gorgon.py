@@ -21,7 +21,7 @@ class DouYin(object):
     process_name = '抖音短视频'       # 抖音版本13.0.0
 
     def hook_prepare(self, process_name):
-        for i in range(5):
+        for i in range(2):
             try:
                 process = frida.get_local_device().attach(process_name)
             except:
@@ -39,7 +39,7 @@ class DouYin(object):
 
     @staticmethod
     def get_douyin_gorgon(script, timestamp, salt):
-        gorgon = script.exports.getgorgon(timestamp, salt)
+        gorgon = script.exports.getgorgon(int(timestamp), salt)
         return gorgon
 
     @staticmethod
