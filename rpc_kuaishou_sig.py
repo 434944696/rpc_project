@@ -74,7 +74,7 @@ class Kuaishou(object):
                 os.system('pkill -9  "smile.gifmaker"')
                 os.system('am start -n com.smile.gifmaker/com.yxcorp.gifshow.HomeActivity')
                 os.system('pkill -9  "frida-server"')
-                os.system('/data/local/tmp/frida-server-15.1.9-android-arm64')
+                os.system('sudo /data/local/tmp/frida-server-15.1.9-android-arm64')
                 time.sleep(1)
                 continue
             script = process.create_script(self.hook_code)
