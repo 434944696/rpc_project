@@ -67,12 +67,13 @@ class Kuaishou(object):
             try:
                 process = frida.get_local_device().attach(processname)
             except:
-                # 杀死进程并且重启和重启frida-server
+                # 重启app，rpc服务每隔30秒检测一次没有进程就开启进程（三个sh脚本完成）
                 os.system('pkill -9  "smile.gifmaker"')
                 os.system('am start -n com.smile.gifmaker/com.yxcorp.gifshow.HomeActivity')
                 os.system('pkill -9  "frida-server"')
-                # os.system('sudo /data/local/tmp/frida-server-15.1.9-android-arm64')
-                # time.sleep(1)
+                os.system('sudo /data/local/tmp/frida-server-15.1.9-android-arm64')
+                print('等待sh脚本启动rpc服务')
+                time.sleep(35)
                 continue
             script = process.create_script(self.hook_code)
             script.on('message', self.on_message)
