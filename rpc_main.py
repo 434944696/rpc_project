@@ -5,6 +5,8 @@ from rpc_kuaishou_sig import Kuaishou
 from rpc_douyin_gorgon import DouYin
 import json
 from fastapi import FastAPI
+import frida
+
 
 class Item(BaseModel):
     data: str
@@ -36,8 +38,12 @@ async def kuaishou_get_sig(item: Item):
         global kuaishou_script
         kuaishou_script = kuaishou.hook_prepare(processname)
         kuaishou_script_is_exist = True
-
-    sig = kuaishou.get_kuishou_sig(kuaishou_script,data=data, form_data=form_data)
+    try:
+        sig = kuaishou.get_kuishou_sig(kuaishou_script,data=data, form_data=form_data)
+    except frida.InvalidOperationError:
+        kuaishou_script = kuaishou.hook_prepare(processname)
+        kuaishou_script_is_exist = True
+        sig = kuaishou.get_kuishou_sig(kuaishou_script, data=data, form_data=form_data)
     return sig
 
 
