@@ -34,7 +34,7 @@ class DouYin(object):
                 continue
             script = process.create_script(self.hook_code)
             script.on('message', self.on_message)
-            script.load()
+            script.load()s
             return script
 
     @staticmethod
