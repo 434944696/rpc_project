@@ -8,7 +8,7 @@ from fastapi import FastAPI
 import frida
 
 
-class Item(BaseModel):
+class KYItem(BaseModel):
     data: str
     formdata: str
     processname: str
@@ -29,7 +29,7 @@ kuaishou_script = ''
 douyin_script_is_exist = False
 douyin_script = ''
 @app.post("/kuaishou/get_sig/")
-async def kuaishou_get_sig(item: Item):
+async def kuaishou_get_sig(item: KYItem):
     data = json.loads(item.data)
     form_data = json.loads(item.formdata)
     processname = item.processname

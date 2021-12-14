@@ -30,11 +30,11 @@ class DouYin(object):
                 os.system('am start -n com.ss.android.ugc.aweme/.main.MainActivity')
                 os.system('pkill -9  "frida-server"')
                 os.system('sudo /data/local/tmp/frida-server-15.1.9-android-arm64')
-                time.sleep(1)
+                time.sleep(10)
                 continue
             script = process.create_script(self.hook_code)
             script.on('message', self.on_message)
-            script.load()s
+            script.load()
             return script
 
     @staticmethod

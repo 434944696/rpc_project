@@ -1,19 +1,15 @@
-#! /bin/sh
+#!/bin/bash
 
-proc_name="rpc_main:app"        #进程名
-
-proc_num()                      #查询进程数量
-{   su
-    num=$(ps -ef | grep $proc_name | grep -v grep | wc -l)
-    return $num
-}
-
-proc_num
-number=$?                       #获取进程数量
-if [ $number -eq 0 ]            #如果进程数量为0
-then                            #重新启动服务器，或者扩展其它内容。
-
-    cd /data/data/com.termux/files/home/rpc_project
-    /data/data/com.termux/files/usr/bin/ngrok http --region=ap --authtoken 21wt5VZONb0oviUCLhjtHp6H7yH_4hS35h9wz8wBKf9XzjgVp --hostname=triata.ap.ngrok.io -host-header=rewrite 8080 &
-
-fi
+while true   # 无限循环
+flag=`sudo ps -aux |grep "rpc_main:app" |grep -v "grep" |wc -l`
+do
+        if [[ $flag -eq 0 ]]   # 判断进程数如果等于0，则启动httpd
+        then
+                echo 111
+                `nohup /data/data/com.termux/files/usr/bin/uvicorn rpc_main:app --host '0.0.0.0' --port 8080 &`   # 启动fastapi
+                echo "rpc_api restart"
+        else
+                echo "rpc_api is running..."
+        fi
+        sleep 30s  # 延迟30秒后进入下次循环
+done
