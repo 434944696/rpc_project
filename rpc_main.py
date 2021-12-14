@@ -57,6 +57,11 @@ async def douyin_get_gorgon(item: DYItem):
         global douyin_script
         douyin_script = douyin.hook_prepare(processname)
         douyin_script_is_exist = True
-    gorgon = douyin.get_douyin_gorgon(douyin_script, timestamp=timestamp, salt=salt)
+    try:
+        gorgon = douyin.get_douyin_gorgon(douyin_script, timestamp=timestamp, salt=salt)
+    except frida.InvalidOperationError:
+        douyin_script = douyin.hook_prepare(processname)
+        douyin_script_is_exist = True
+        gorgon = douyin.get_douyin_gorgon(douyin_script, timestamp=timestamp, salt=salt)
     return gorgon
 

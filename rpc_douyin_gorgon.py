@@ -18,7 +18,7 @@ class DouYin(object):
         }
     }
     """
-    process_name = '抖音短视频'       # 抖音版本13.0.0
+    # process_name = '抖音短视频'       # 抖音版本13.0.0
 
     def hook_prepare(self, process_name):
         for i in range(2):
