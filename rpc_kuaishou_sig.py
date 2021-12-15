@@ -72,8 +72,7 @@ class Kuaishou(object):
                 os.system('am start -n com.smile.gifmaker/com.yxcorp.gifshow.HomeActivity')
                 os.system('pkill -9  "frida-server"')
                 os.system('sudo /data/local/tmp/frida-server-15.1.9-android-arm64')
-                print('等待sh脚本启动rpc服务')
-                time.sleep(35)
+                time.sleep(10)
                 continue
             script = process.create_script(self.hook_code)
             script.on('message', self.on_message)
