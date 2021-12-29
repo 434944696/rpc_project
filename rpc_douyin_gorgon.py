@@ -18,12 +18,12 @@ class DouYin(object):
         }
     }
     """
-    # process_name = '抖音短视频'       # 抖音版本13.0.0
+    # processname = '抖音短视频'       # 抖音版本13.0.0
 
-    def hook_prepare(self, process_name):
+    def hook_prepare(self, processname):
         for i in range(2):
             try:
-                process = frida.get_local_device().attach(process_name)
+                process = frida.get_local_device().attach(processname)
             except:
                 # 杀死进程并且重启和重启frida-server
                 os.system('pkill -9  "aweme"')
