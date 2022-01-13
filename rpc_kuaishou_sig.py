@@ -7,60 +7,9 @@ import requests
 import os
 
 class Kuaishou(object):
-    hook_code = '''
-    rpc.exports = {
-        getsig: function(encode_param){
-            var sig = '';
-            Java.perform(
-                function(){
-                    var CPU = Java.use('com.yxcorp.gifshow.util.CPU');
-                    var currentApplication = Java.use('android.app.ActivityThread').currentApplication();
-                    var context = currentApplication.getApplicationContext();
-                    var b = stringToBytes(encode_param)
-                    sig = CPU.getClock(context,b,27)
-                }
-            )
-            return sig;
-        }
-    }
-    function bytesToString(arr) {
-        if(typeof arr === 'string') {
-            return arr;
-        }
-        var str = '',
-            _arr = arr;
-        for(var i = 0; i < _arr.length; i++) {
-            var one = _arr[i].toString(2),
-                v = one.match(/^1+?(?=0)/);
-            if(v && one.length == 8) {
-                var bytesLength = v[0].length;
-                var store = _arr[i].toString(2).slice(7 - bytesLength);
-                for(var st = 1; st < bytesLength; st++) {
-                    store += _arr[st + i].toString(2).slice(2);
-                }
-                str += String.fromCharCode(parseInt(store, 2));
-                i += bytesLength - 1;
-            } else {
-                str += String.fromCharCode(_arr[i]);
-            }
-        }
-        return str;
-    }
-    function stringToBytes(str) {
-        var ch, st, re = [];
-        for (var i = 0; i < str.length; i++ ) {
-            ch = str.charCodeAt(i);
-            st = [];
-            do {
-                st.push( ch & 0xFF );
-                ch = ch >> 8;
-            }
-            while ( ch );
-            re = re.concat( st.reverse() );
-        }
-        return re;
-    }
-    '''
+    with open('kuaishou.js','r')as f:
+        hook_code = f.read()
+
 
     def hook_prepare(self,processname):
         for i in range(2):
