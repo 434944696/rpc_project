@@ -1,9 +1,7 @@
 # 算法具体实现在so函数，快手获得sig签名 rpc调用 2021-12-1  frida==15.1.1  andriod==8.1
+import re
 import time
 import frida
-import sys
-from urllib.parse import urlencode
-import requests
 import os
 
 
@@ -45,6 +43,12 @@ class Kuaishou(object):
         data_str = self.sort_data(data)
         sig = script.exports.getsig(data_str)
         return sig
+
+    def get_kuishou_sig3(self, script, sig, url):
+        path_url = ''.join(re.findall('.com(.*?)\?', url))
+        data_str = path_url + sig
+        sig3 = script.exports.getsig3(data_str)
+        return sig3
 
     def on_message(self, message, data):
         if message['type'] == 'send':

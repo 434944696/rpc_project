@@ -1,5 +1,5 @@
 # 启动fastApi服务 uvicorn rpc_main:app --host '0.0.0.0' --port 8080 --reload
-# 手机 /data/data/com.termux/files/usr/bin/uvicorn rpc_main:app --host '0.0.0.0' --port 8080
+# 手机 sudo /data/data/com.termux/files/usr/bin/uvicorn rpc_main:app --host '0.0.0.0' --port 8080 &
 from pydantic import BaseModel
 from rpc_kuaishou_sig import Kuaishou
 from rpc_douyin_gorgon import DouYin
@@ -8,9 +8,15 @@ from fastapi import FastAPI
 import frida
 
 
-class KYItem(BaseModel):
+class Item(BaseModel):
     data: str
     formdata: str
+    processname: str
+
+
+class KSItem2(BaseModel):
+    sig: str
+    url: str
     processname: str
 
 
@@ -24,6 +30,7 @@ app = FastAPI()
 kuaishou = Kuaishou()
 douyin = DouYin()
 
+
 kuaishou_script_is_exist = False
 kuaishou_script = ''
 douyin_script_is_exist = False
@@ -31,7 +38,7 @@ douyin_script = ''
 
 
 @app.post("/kuaishou/get_sig/")
-async def kuaishou_get_sig(item: KYItem):
+async def kuaishou_get_sig(item: Item):
     data = json.loads(item.data)
     form_data = json.loads(item.formdata)
     processname = item.processname
@@ -49,6 +56,25 @@ async def kuaishou_get_sig(item: KYItem):
     return sig
 
 
+@app.post("/kuaishou/get_sig3/")
+async def kuaishou_get_sig3(item: KSItem2):
+    url = json.loads(item.url)
+    sig = json.loads(item.sig)
+    processname = item.processname
+    global kuaishou_script_is_exist
+    if not kuaishou_script_is_exist:
+        global kuaishou_script
+        kuaishou_script = kuaishou.hook_prepare(processname)
+        kuaishou_script_is_exist = True
+    try:
+        sig3 = kuaishou.get_kuishou_sig3(kuaishou_script, sig, url)
+    except frida.InvalidOperationError:
+        kuaishou_script = kuaishou.hook_prepare(processname)
+        kuaishou_script_is_exist = True
+        sig3 = kuaishou.get_kuishou_sig3(kuaishou_script, sig, url)
+    return sig3
+
+
 @app.post("/douyin/get_gorgon/")
 async def douyin_get_gorgon(item: DYItem):
     timestamp = item.timestamp
@@ -59,10 +85,5 @@ async def douyin_get_gorgon(item: DYItem):
         global douyin_script
         douyin_script = douyin.hook_prepare(processname)
         douyin_script_is_exist = True
-    try:
-        gorgon = douyin.get_douyin_gorgon(douyin_script, timestamp=timestamp, salt=salt)
-    except frida.InvalidOperationError:
-        douyin_script = douyin.hook_prepare(processname)
-        douyin_script_is_exist = True
-        gorgon = douyin.get_douyin_gorgon(douyin_script, timestamp=timestamp, salt=salt)
+    gorgon = douyin.get_douyin_gorgon(douyin_script, timestamp=timestamp, salt=salt)
     return gorgon
