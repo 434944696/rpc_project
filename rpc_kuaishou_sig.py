@@ -6,12 +6,13 @@ from urllib.parse import urlencode
 import requests
 import os
 
+
 class Kuaishou(object):
-    with open('kuaishou.js','r')as f:
+    hook_code = ''
+    with open('kuaishou.js', 'r')as f:
         hook_code = f.read()
 
-
-    def hook_prepare(self,processname):
+    def hook_prepare(self, processname):
         for i in range(2):
             try:
                 process = frida.get_local_device().attach(processname)
@@ -39,17 +40,18 @@ class Kuaishou(object):
         else:
             raise Exception('传入的参数必须为字典')
 
-    def get_kuishou_sig(self,script,data={}, form_data={}):
+    def get_kuishou_sig(self, script, data={}, form_data={}):
         data.update(form_data)
         data_str = self.sort_data(data)
         sig = script.exports.getsig(data_str)
         return sig
 
-    def on_message(self,message, data):
+    def on_message(self, message, data):
         if message['type'] == 'send':
             print("[*] {0}".format(message['payload']))
         else:
             print(message)
+
 
 if __name__ == '__main__':
     pass

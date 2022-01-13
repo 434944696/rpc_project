@@ -28,6 +28,8 @@ kuaishou_script_is_exist = False
 kuaishou_script = ''
 douyin_script_is_exist = False
 douyin_script = ''
+
+
 @app.post("/kuaishou/get_sig/")
 async def kuaishou_get_sig(item: KYItem):
     data = json.loads(item.data)
@@ -39,7 +41,7 @@ async def kuaishou_get_sig(item: KYItem):
         kuaishou_script = kuaishou.hook_prepare(processname)
         kuaishou_script_is_exist = True
     try:
-        sig = kuaishou.get_kuishou_sig(kuaishou_script,data=data, form_data=form_data)
+        sig = kuaishou.get_kuishou_sig(kuaishou_script, data=data, form_data=form_data)
     except frida.InvalidOperationError:
         kuaishou_script = kuaishou.hook_prepare(processname)
         kuaishou_script_is_exist = True
@@ -64,4 +66,3 @@ async def douyin_get_gorgon(item: DYItem):
         douyin_script_is_exist = True
         gorgon = douyin.get_douyin_gorgon(douyin_script, timestamp=timestamp, salt=salt)
     return gorgon
-
