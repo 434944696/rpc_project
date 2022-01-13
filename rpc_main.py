@@ -1,11 +1,13 @@
 # 启动fastApi服务 uvicorn rpc_main:app --host '0.0.0.0' --port 8080 --reload
-# 手机 sudo /data/data/com.termux/files/usr/bin/uvicorn rpc_main:app --host '0.0.0.0' --port 8080 &
+# 手机 /data/data/com.termux/files/usr/bin/uvicorn rpc_main:app --host '0.0.0.0' --port 8080
 from pydantic import BaseModel
 from rpc_kuaishou_sig import Kuaishou
 from rpc_douyin_gorgon import DouYin
 import json
 from fastapi import FastAPI
 import frida
+from routes.beike import beike_route
+import uvicorn
 
 
 class Item(BaseModel):
@@ -27,6 +29,7 @@ class DYItem(BaseModel):
 
 
 app = FastAPI()
+app.router.include_router(beike_route, prefix='/beike')
 kuaishou = Kuaishou()
 douyin = DouYin()
 
@@ -87,3 +90,7 @@ async def douyin_get_gorgon(item: DYItem):
         douyin_script_is_exist = True
     gorgon = douyin.get_douyin_gorgon(douyin_script, timestamp=timestamp, salt=salt)
     return gorgon
+
+
+if __name__ == '__main__':
+    uvicorn.run(app='rpc_main:app', host='0.0.0.0', port=8080, reload=True)
