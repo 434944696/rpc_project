@@ -58,8 +58,8 @@ async def kuaishou_get_sig(item: Item):
 
 @app.post("/kuaishou/get_sig3/")
 async def kuaishou_get_sig3(item: KSItem2):
-    url = json.loads(item.url)
-    sig = json.loads(item.sig)
+    url = item.url
+    sig = item.sig
     processname = item.processname
     global kuaishou_script_is_exist
     if not kuaishou_script_is_exist:
