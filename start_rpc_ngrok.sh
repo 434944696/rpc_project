@@ -1,22 +1,19 @@
 #!/bin/bash
 #得到对应服务的进程号
-my_array=()
-my_array[0]="ngrok http"
-my_array[1]="rpc_main:app"
-my_array[2]="frida-serverp"
-for i in ${my_array[@]}; do
-    echo $i;
-  str=`sudo ps -ef | grep $i | grep -v "grep"|awk '{print $2}'`
-  #获取进程所在的目录
-  pwd=`sudo ls -l /proc/${str} | grep "cwd ->" | grep -v "grep" | awk '{print $NF}'`
-  echo "进程目录是："$pwd
-  sudo kill -9 $str
-  if [ "$?" -eq 0 ]; then
-                  echo "killed pid is "$str
-                      echo "kill success"
-              else
-                          echo "kill failed"
-                  fi
+str1=`sudo ps -ef | grep "ngrok http" | grep -v "grep"|awk '{print $2}'`
+str2=`sudo ps -ef | grep "rpc_main:app" | grep -v "grep"|awk '{print $2}'`
+str3=`sudo ps -ef | grep "frida-server" | grep -v "grep"|awk '{print $2}'`
+#获取进程所在的目录
+pwd1=`sudo ls -l /proc/${str1} | grep "cwd ->" | grep -v "grep" | awk '{print $NF}'`
+pwd2=`sudo ls -l /proc/${str2} | grep "cwd ->" | grep -v "grep" | awk '{print $NF}'`
+pwd3=`sudo ls -l /proc/${str3} | grep "cwd ->" | grep -v "grep" | awk '{print $NF}'`
+echo "进程目录是："$pwd1
+echo "进程目录是："$pwd2
+echo "进程目录是："$pwd3
+sudo kill -9 $str1
+sudo kill -9 $str2
+sudo kill -9 $str3
+
 
 
 flag2=`sudo ps -aux |grep "ngrok http" |grep -v "grep" |wc -l`
