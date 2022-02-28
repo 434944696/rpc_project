@@ -1,6 +1,9 @@
 #!/bin/bash
 #得到对应服务的进程号
-my_array=("ngrok http" "rpc_main:app" "frida-server")
+my_array=()
+my_array[0]="ngrok http"
+my_array[1]="rpc_main:app"
+my_array[2]="frida-serverp"
 for i in ${my_array[@]}; do
     echo $i;
   str=`sudo ps -ef | grep $i | grep -v "grep"|awk '{print $2}'`
