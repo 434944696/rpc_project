@@ -7,6 +7,7 @@ then
         echo "ngrok restart"
 else
         echo "ngrok is running..."
+fi
 
 flag=`sudo ps -aux |grep "rpc_main:app" |grep -v "grep" |wc -l`
 if [[ $flag -eq 0 ]]   # 判断进程数如果等于0，等于则启动
@@ -15,7 +16,7 @@ then
         echo "rpc_api restart"
 else
         echo "rpc_api is running..."
-
+fi
 
 
 
