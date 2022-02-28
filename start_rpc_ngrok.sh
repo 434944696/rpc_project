@@ -12,7 +12,7 @@ fi
 flag=`sudo ps -aux |grep "rpc_main:app" |grep -v "grep" |wc -l`
 if [ $flag -eq 0 ]  # 判断进程数如果等于0，等于则启动
 then
-        ` nohup sudo /data/data/com.termux/files/usr/bin/uvicorn rpc_main:app --host '0.0.0.0' --port 8080 >rpc.log &`   # 启动fastapi
+        `su & nohup sudo /data/data/com.termux/files/usr/bin/uvicorn rpc_main:app --host '0.0.0.0' --port 8080 >rpc.log &`   # 启动fastapi
         echo "rpc_api restart"
 else
         echo "rpc_api is running..."
