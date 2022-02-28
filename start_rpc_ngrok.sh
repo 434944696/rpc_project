@@ -1,4 +1,23 @@
 #!/bin/bash
+#得到对应服务的进程号
+array=("ngrok http" "rpc_main:app" "frida-server")
+for(( i=0;i<${#array[@]};i++))
+#${#array[@]}获取数组长度用于循环
+do
+    echo ${array[i]};
+  str=`ps -ef | grep array[i] | grep -v "grep"|awk '{print $2}'`
+  #获取进程所在的目录
+  pwd=`ls -l /proc/${str} | grep "cwd ->" | grep -v "grep" | awk '{print $NF}'`
+  echo "进程目录是："$pwd
+  kill -9 $str
+  if [ "$?" -eq 0 ]; then
+                  echo "killed pid is "$str
+                      echo "kill success"
+              else
+                          echo "kill failed"
+                  fi
+done;
+
 
 flag2=`sudo ps -aux |grep "ngrok http" |grep -v "grep" |wc -l`
 if [ $flag2 -eq 0 ]   # 判断进程数如果等于0，等于则启动
