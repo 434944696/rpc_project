@@ -3,7 +3,7 @@
 flag2=`sudo ps -aux |grep "ngrok http" |grep -v "grep" |wc -l`
 if [ $flag2 -eq 0 ]   # 判断进程数如果等于0，等于则启动
 then
-        `su & nohup /data/data/com.termux/files/usr/bin/ngrok http --region=ap --authtoken 21wt5VZONb0oviUCLhjtHp6H7yH_4hS35h9wz8wBKf9XzjgVp --hostname=triata.ap.ngrok.io -host-header=rewrite 8080 >ngrok.log 2>&1 &`   # 启动httpd
+        `su & nohup /data/data/com.termux/files/usr/bin/ngrok http --region=ap --authtoken 21wt5VZONb0oviUCLhjtHp6H7yH_4hS35h9wz8wBKf9XzjgVp --hostname=triata.ap.ngrok.io -host-header=rewrite 8080 >ngrok.log 2>&1 &`   # 启动httpd,只输出ngrok.log不输出nohup.log
         echo "ngrok restart"
 else
         echo "ngrok is running..."
@@ -18,5 +18,13 @@ else
         echo "rpc_api is running..."
 fi
 
+flag3=`sudo ps -aux |grep "frida-server" |grep -v "grep" |wc -l`
+if [ $flag3 -eq 0 ]  # 判断进程数如果等于0，等于则启动
+then
+        `su & nohup /data/local/tmp/frida-server-15.1.9-android-arm64 >frida_server.log 2>&1 &`
+        echo "frida-server restart"
+else
+        echo "frida-server is running..."
+fi
 
 
