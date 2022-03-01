@@ -3,6 +3,7 @@
 from pydantic import BaseModel
 from rpc_kuaishou_sig import Kuaishou
 from rpc_douyin_gorgon import DouYin
+from rpc_pinduoduo_anti_token import Pdd
 import json
 from fastapi import FastAPI
 import frida
@@ -28,16 +29,22 @@ class DYItem(BaseModel):
     processname: str
 
 
+class PDItem(BaseModel):
+    url: str
+    processname: str
+
+
 app = FastAPI()
 app.router.include_router(beike_route, prefix='/beike')
 kuaishou = Kuaishou()
 douyin = DouYin()
-
-
+pdd = Pdd()
 kuaishou_script_is_exist = False
 kuaishou_script = ''
 douyin_script_is_exist = False
 douyin_script = ''
+pinduoduo_script_is_exist = False
+pinduoduo_script = ''
 
 
 @app.post("/kuaishou/get_sig/")
@@ -90,6 +97,24 @@ async def douyin_get_gorgon(item: DYItem):
         douyin_script_is_exist = True
     gorgon = douyin.get_douyin_gorgon(douyin_script, timestamp=timestamp, salt=salt)
     return gorgon
+
+
+@app.post("/pinduoduo/get_antitoken/")
+async def pinduoduo_get_antitoken(item: PDItem):
+    url = item.url
+    processname = item.processname
+    global pinduoduo_script_is_exist
+    if not pinduoduo_script_is_exist:
+        global pinduoduo_script
+        pinduoduo_script = pdd.hook_prepare(processname)
+        pinduoduo_script_is_exist = True
+    try:
+        antitoken = pdd.getantitoken(pinduoduo_script, url)
+    except frida.InvalidOperationError:
+        pinduoduo_script = pdd.hook_prepare(processname)
+        pinduoduo_script_is_exist = True
+        antitoken = pdd.getantitoken(pinduoduo_script, url)
+    return antitoken
 
 
 if __name__ == '__main__':
