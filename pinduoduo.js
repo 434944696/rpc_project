@@ -10,7 +10,7 @@ function getantitoken(param) { //定义导出函数
           //匹配到对象执行的回调函数
           onMatch: function (instance)
           {
-            result = instance.c(param);
+            result = instance.c(param,false);
             result = HashMap_tosting(result);
           },
           //搜索完成后执行的回调函数
